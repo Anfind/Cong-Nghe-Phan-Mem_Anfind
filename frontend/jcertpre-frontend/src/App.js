@@ -1,45 +1,117 @@
-// frontend/jcertpre-frontend/src/App.js
-       import React, { useState } from 'react';
-       import axios from 'axios';
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import Login from './components/Login';
+import Register from './components/Register';
+import Home from './components/Home';
+import CourseDetail from './components/CourseDetail';
+import Quiz from './components/Quiz';
+import Results from './components/Results';
 
-       function App() {
-           const [username, setUsername] = useState('');
-           const [password, setPassword] = useState('');
+function App() {
+    const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(true);
 
-           const handleLogin = async () => {
-               try {
-                   const response = await axios.post('http://localhost:5032/api/auth/login', { username, password });
-                   alert(response.data.message);
-               } catch (error) {
-                   alert('Đăng nhập thất bại');
-               }
-           };
+    useEffect(() => {
+        // Kiểm tra user đã đăng nhập từ localStorage
+        const savedUser = localStorage.getItem('user');
+        if (savedUser) {
+            try {
+                setUser(JSON.parse(savedUser));
+            } catch (error) {
+                localStorage.removeItem('user');
+            }
+        }
+        setLoading(false);
+    }, []);
 
-           return (
-               <div style={{ textAlign: 'center', marginTop: '50px' }}>
-                   <h2>Sign in to JCertPre</h2>
-                   <input
-                       type="text"
-                       placeholder="Username"
-                       value={username}
-                       onChange={(e) => setUsername(e.target.value)}
-                       style={{ display: 'block', margin: '10px auto', padding: '10px', width: '200px' }}
-                   />
-                   <input
-                       type="password"
-                       placeholder="Password"
-                       value={password}
-                       onChange={(e) => setPassword(e.target.value)}
-                       style={{ display: 'block', margin: '10px auto', padding: '10px', width: '200px' }}
-                   />
-                   <button
-                       onClick={handleLogin}
-                       style={{ padding: '10px 20px', backgroundColor: '#007bff', color: 'white', border: 'none' }}
-                   >
-                       Sign in
-                   </button>
-               </div>
-           );
-       }
+    const handleLogin = (userId) => {
+        const userData = { id: userId };
+        setUser(userData);
+    };
 
-       export default App;
+    const handleLogout = () => {
+        setUser(null);
+        localStorage.removeItem('user');
+    };
+
+    const handleRegister = () => {
+        // Chuyển hướng về trang login sau khi đăng ký
+        window.location.href = '/login';
+    };
+
+    if (loading) {
+        return (
+            <div style={{ 
+                display: 'flex', 
+                justifyContent: 'center', 
+                alignItems: 'center', 
+                height: '100vh',
+                fontSize: '18px' 
+            }}>
+                Đang tải...
+            </div>
+        );
+    }
+
+    return (
+        <Router>
+            <div style={{ minHeight: '100vh', backgroundColor: '#f5f5f5' }}>
+                <Routes>
+                    {/* Public Routes */}
+                    <Route 
+                        path="/login" 
+                        element={
+                            user ? <Navigate to="/" replace /> : 
+                            <Login onLogin={handleLogin} />
+                        } 
+                    />
+                    <Route 
+                        path="/register" 
+                        element={
+                            user ? <Navigate to="/" replace /> : 
+                            <Register onRegister={handleRegister} />
+                        } 
+                    />
+
+                    {/* Protected Routes */}
+                    <Route 
+                        path="/" 
+                        element={
+                            user ? <Home user={user} onLogout={handleLogout} /> : 
+                            <Navigate to="/login" replace />
+                        } 
+                    />
+                    <Route 
+                        path="/course/:courseId" 
+                        element={
+                            user ? <CourseDetail user={user} /> : 
+                            <Navigate to="/login" replace />
+                        } 
+                    />
+                    <Route 
+                        path="/quiz/:courseId" 
+                        element={
+                            user ? <Quiz user={user} /> : 
+                            <Navigate to="/login" replace />
+                        } 
+                    />
+                    <Route 
+                        path="/results" 
+                        element={
+                            user ? <Results user={user} /> : 
+                            <Navigate to="/login" replace />
+                        } 
+                    />
+
+                    {/* Fallback Route */}
+                    <Route 
+                        path="*" 
+                        element={<Navigate to={user ? "/" : "/login"} replace />} 
+                    />
+                </Routes>
+            </div>
+        </Router>
+    );
+}
+
+export default App;
