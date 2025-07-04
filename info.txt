@@ -1,0 +1,34 @@
+CẦN LÀM:
+1. Website (ReactJS đơn giản)
+
+Trang đăng nhập/đăng ký
+Trang chủ hiển thị danh sách khóa học
+Trang chi tiết khóa học (xem video)
+Trang thi thử (làm bài + xem điểm)
+Trang xem kết quả học tập
+
+2. Backend API (.NET Core hoặc Node.js)
+
+Đăng nhập/đăng ký user
+Quản lý khóa học (thêm/sửa/xóa)
+Quản lý bài thi (làm bài + chấm điểm tự động)
+Lưu kết quả học tập
+
+3. Database (MySQL)
+
+Bảng user, khóa học, bài thi, kết quả
+Thiết kế database đơn giản
+
+4. Tài liệu
+
+File README hướng dẫn chạy code
+Document API đơn giản
+
+KHÔNG CẦN LÀM 
+App điện thoại (React Native)
+Live stream - chỉ cần upload video
+Chat real-time - chỉ cần comment đơn giản
+Tư vấn chuyên gia - chỉ cần form liên hệ
+Báo cáo phức tạp - chỉ hiển thị điểm cơ bản
+Giao diện fancy - UI đơn giản, sạch sẽ
+Responsive mobile - chỉ cần chạy tốt trên desktop
