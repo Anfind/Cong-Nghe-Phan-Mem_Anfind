@@ -47,7 +47,7 @@ namespace JCertPreBackend.Controllers
             foreach (var answer in request.Answers)
             {
                 var question = quiz.Questions.FirstOrDefault(q => q.Id == answer.QuestionId);
-                if (question != null && question.CorrectAnswer == answer.SelectedAnswer)
+                if (question != null && question.CorrectAnswer == answer.SelectedAnswer.ToString())
                 {
                     correctAnswers++;
                 }
@@ -134,7 +134,7 @@ namespace JCertPreBackend.Controllers
                         Option2 = "が",
                         Option3 = "を",
                         Option4 = "に",
-                        CorrectAnswer = 0,
+                        CorrectAnswer = "0",
                         Explanation = "「の」được sử dụng để biểu thị sở hữu hoặc thuộc tính.",
                         Order = 1
                     },
@@ -147,7 +147,7 @@ namespace JCertPreBackend.Controllers
                         Option2 = "あまり",
                         Option3 = "ちょっと",
                         Option4 = "たぶん",
-                        CorrectAnswer = 0,
+                        CorrectAnswer = "0",
                         Explanation = "「とても」có nghĩa là 'rất' và phù hợp với ngữ cảnh tích cực.",
                         Order = 2
                     },
@@ -160,7 +160,7 @@ namespace JCertPreBackend.Controllers
                         Option2 = "見た",
                         Option3 = "見て",
                         Option4 = "見",
-                        CorrectAnswer = 2,
+                        CorrectAnswer = "2",
                         Explanation = "「見て」là dạng te-form của động từ 見る, dùng khi kết hợp với ました.",
                         Order = 3
                     },
@@ -173,7 +173,7 @@ namespace JCertPreBackend.Controllers
                         Option2 = "どこ",
                         Option3 = "なに",
                         Option4 = "だれの",
-                        CorrectAnswer = 3,
+                        CorrectAnswer = "3",
                         Explanation = "「だれの」nghĩa là 'của ai', dùng để hỏi về sở hữu.",
                         Order = 4
                     },
@@ -186,7 +186,7 @@ namespace JCertPreBackend.Controllers
                         Option2 = "で",
                         Option3 = "を",
                         Option4 = "が",
-                        CorrectAnswer = 0,
+                        CorrectAnswer = "0",
                         Explanation = "「に」được sử dụng để chỉ thời gian cụ thể.",
                         Order = 5
                     }
@@ -214,7 +214,7 @@ namespace JCertPreBackend.Controllers
                         Option2 = "見",
                         Option3 = "見て",
                         Option4 = "見た",
-                        CorrectAnswer = 0,
+                        CorrectAnswer = "0",
                         Explanation = "「見る」是动词原形，与「に行く」搭配使用。",
                         Order = 1
                     },
@@ -227,7 +227,7 @@ namespace JCertPreBackend.Controllers
                         Option2 = "あまり",
                         Option3 = "全然",
                         Option4 = "ちっとも",
-                        CorrectAnswer = 0,
+                        CorrectAnswer = "0",
                         Explanation = "「とても」表示程度很高，用于肯定句。",
                         Order = 2
                     }

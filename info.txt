@@ -32,3 +32,6 @@ Tư vấn chuyên gia - chỉ cần form liên hệ
 Báo cáo phức tạp - chỉ hiển thị điểm cơ bản
 Giao diện fancy - UI đơn giản, sạch sẽ
 Responsive mobile - chỉ cần chạy tốt trên desktop
+
+
+dotnet add package Microsoft.AspNetCore.Authentication.JwtBearer --version 6.0.25
