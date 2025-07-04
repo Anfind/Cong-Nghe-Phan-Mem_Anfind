@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Register Button</title>
+</head>
+<body>
+    <h2>Test Register Button</h2>
+    
+    <form id="registerForm">
+        <div>
+            <input type="text" id="fullName" placeholder="Họ và tên" required style="display: block; margin: 10px 0; padding: 10px; width: 200px;">
+        </div>
+        <div>
+            <input type="email" id="email" placeholder="Email" required style="display: block; margin: 10px 0; padding: 10px; width: 200px;">
+        </div>
+        <div>
+            <input type="text" id="username" placeholder="Tên đăng nhập" required style="display: block; margin: 10px 0; padding: 10px; width: 200px;">
+        </div>
+        <div>
+            <input type="password" id="password" placeholder="Mật khẩu" required style="display: block; margin: 10px 0; padding: 10px; width: 200px;">
+        </div>
+        <div>
+            <input type="password" id="confirmPassword" placeholder="Xác nhận mật khẩu" required style="display: block; margin: 10px 0; padding: 10px; width: 200px;">
+        </div>
+        
+        <button type="button" id="registerBtn" style="
+            padding: 12px 24px; 
+            background-color: #28a745; 
+            color: white; 
+            border: none; 
+            border-radius: 6px; 
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+        ">
+            📝 Đăng ký tài khoản
+        </button>
+    </form>
+
+    <div id="result" style="margin-top: 20px; padding: 10px; border-radius: 4px;"></div>
+
+    <script>
+        document.getElementById('registerBtn').addEventListener('click', function() {
+            console.log('Button clicked!');
+            
+            const fullName = document.getElementById('fullName').value;
+            const email = document.getElementById('email').value;
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            console.log('Form data:', { fullName, email, username, password, confirmPassword });
+            
+            // Validation
+            if (!fullName || !email || !username || !password || !confirmPassword) {
+                alert('Vui lòng điền đầy đủ thông tin');
+                return;
+            }
+            
+            if (password !== confirmPassword) {
+                alert('Mật khẩu xác nhận không khớp');
+                return;
+            }
+            
+            if (password.length < 6) {
+                alert('Mật khẩu phải có ít nhất 6 ký tự');
+                return;
+            }
+            
+            // Show loading state
+            this.innerHTML = '⏳ Đang đăng ký...';
+            this.disabled = true;
+            this.style.backgroundColor = '#6c757d';
+            
+            // Simulate API call
+            setTimeout(() => {
+                fetch('http://localhost:5032/api/auth/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        username,
+                        password,
+                        fullName,
+                        email
+                    })
+                })
+                .then(response => {
+                    console.log('Response status:', response.status);
+                    console.log('Response:', response);
+                    
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                    }
+                })
+                .then(data => {
+                    console.log('Success:', data);
+                    document.getElementById('result').innerHTML = `
+                        <div style="background-color: #d4edda; border: 1px solid #c3e6cb; color: #155724; padding: 10px;">
+                            ✅ Đăng ký thành công!
+                        </div>
+                    `;
+                    
+                    // Reset form
+                    document.getElementById('registerForm').reset();
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    document.getElementById('result').innerHTML = `
+                        <div style="background-color: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; padding: 10px;">
+                            ❌ Lỗi: ${error.message}
+                        </div>
+                    `;
+                })
+                .finally(() => {
+                    // Reset button
+                    this.innerHTML = '📝 Đăng ký tài khoản';
+                    this.disabled = false;
+                    this.style.backgroundColor = '#28a745';
+                });
+            }, 100);
+        });
+    </script>
+</body>
+</html>

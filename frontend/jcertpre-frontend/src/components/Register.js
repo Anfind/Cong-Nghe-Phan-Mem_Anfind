@@ -20,7 +20,11 @@ function Register({ onRegister }) {
     };
 
     const handleRegister = async () => {
+        console.log('Register button clicked!'); // Debug log
+        
         const { username, password, confirmPassword, fullName, email } = formData;
+
+        console.log('Form data:', formData); // Debug log
 
         // Validation
         if (!username || !password || !confirmPassword || !fullName || !email) {
@@ -39,13 +43,17 @@ function Register({ onRegister }) {
         }
 
         setLoading(true);
+        console.log('Sending register request...'); // Debug log
+        
         try {
-            await axios.post('http://localhost:5032/api/auth/register', {
+            const response = await axios.post('http://localhost:5032/api/auth/register', {
                 username,
                 password,
                 fullName,
                 email
             });
+            
+            console.log('Register response:', response.data); // Debug log
             
             // Show success state
             setSuccess(true);
@@ -68,7 +76,20 @@ function Register({ onRegister }) {
             }, 1000);
             
         } catch (error) {
-            alert(error.response?.data?.message || 'Đăng ký thất bại. Vui lòng thử lại.');
+            console.error('Register error:', error); // Debug log
+            console.error('Error response:', error.response); // Debug log
+            
+            let errorMessage = 'Đăng ký thất bại. Vui lòng thử lại.';
+            
+            if (error.response?.data?.message) {
+                errorMessage = error.response.data.message;
+            } else if (error.response?.data) {
+                errorMessage = error.response.data;
+            } else if (error.message) {
+                errorMessage = `Lỗi kết nối: ${error.message}`;
+            }
+            
+            alert(errorMessage);
             setSuccess(false);
         } finally {
             setLoading(false);
@@ -226,17 +247,20 @@ function Register({ onRegister }) {
                 disabled={loading}
                 style={{ 
                     width: '100%',
-                    padding: '12px', 
+                    padding: '14px', 
                     backgroundColor: loading ? '#6c757d' : '#28a745', 
                     color: 'white', 
                     border: 'none',
-                    borderRadius: '4px',
+                    borderRadius: '6px',
                     fontSize: '16px',
                     fontWeight: 'bold',
                     cursor: loading ? 'not-allowed' : 'pointer',
                     transition: 'all 0.3s ease',
                     transform: loading ? 'none' : 'translateY(0)',
-                    boxShadow: loading ? 'none' : '0 2px 4px rgba(40, 167, 69, 0.3)'
+                    boxShadow: loading ? 'none' : '0 2px 4px rgba(40, 167, 69, 0.3)',
+                    outline: 'none',
+                    position: 'relative',
+                    overflow: 'hidden'
                 }}
                 onMouseEnter={(e) => {
                     if (!loading) {
@@ -252,17 +276,44 @@ function Register({ onRegister }) {
                         e.target.style.boxShadow = '0 2px 4px rgba(40, 167, 69, 0.3)';
                     }
                 }}
+                onMouseDown={(e) => {
+                    if (!loading) {
+                        e.target.style.transform = 'translateY(1px)';
+                    }
+                }}
+                onMouseUp={(e) => {
+                    if (!loading) {
+                        e.target.style.transform = 'translateY(-1px)';
+                    }
+                }}
             >
                 {loading ? (
-                    <span>
-                        ⏳ Đang đăng ký...
+                    <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <span style={{ 
+                            animation: 'spin 1s linear infinite',
+                            marginRight: '8px',
+                            display: 'inline-block'
+                        }}>⏳</span>
+                        Đang đăng ký...
                     </span>
                 ) : (
-                    <span>
-                        📝 Đăng ký
+                    <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <span style={{ marginRight: '8px' }}>📝</span>
+                        Đăng ký tài khoản
                     </span>
                 )}
             </button>
+            
+            <style>{`
+                @keyframes spin {
+                    from { transform: rotate(0deg); }
+                    to { transform: rotate(360deg); }
+                }
+                @keyframes progress {
+                    from { width: 0%; }
+                    to { width: 100%; }
+                }
+            `}</style>
             
             <div style={{ textAlign: 'center', marginTop: '20px' }}>
                 <span style={{ color: '#666' }}>Đã có tài khoản? </span>

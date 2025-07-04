@@ -1,4 +1,4 @@
-   # JCertPre - Hệ thống học và luyện thi tiếng Nhật
+# JCertPre - Hệ thống học và luyện thi tiếng Nhật
 
 ## 📖 Mô tả dự án
 Ứng dụng web học và luyện thi chứng chỉ tiếng Nhật (JLPT, NAT-TEST) với các tính năng:
@@ -117,6 +117,49 @@ npm start
 - Kiểm tra Network tab trong Developer Tools
 - Xem console logs ở cả frontend và backend
 - Sử dụng Swagger UI để test API trực tiếp
+
+## 🔧 Debug nút đăng ký không hoạt động
+
+### 1. Sử dụng Mock Backend (Khuyến nghị)
+Nếu .NET chưa được cài đặt hoặc có vấn đề với backend chính:
+
+```bash
+# Chạy mock backend (Node.js)
+start-mock-backend.bat
+
+# Hoặc manual:
+npm install
+node mock-backend.js
+```
+
+✅ Mock backend sẽ chạy tại: http://localhost:5032
+
+### 2. Test đơn lẻ với HTML
+Mở file `test-register.html` trong trình duyệt để test chức năng đăng ký:
+
+```bash
+# Mở file trong trình duyệt
+start test-register.html
+```
+
+### 3. Kiểm tra Console
+1. Mở Developer Tools (F12)
+2. Vào tab Console  
+3. Điền form và nhấn "Đăng ký tài khoản"
+4. Xem log để phát hiện lỗi:
+   - `Register button clicked!`
+   - `Form data: {...}`
+   - `Sending register request...`
+   - `Register response: {...}` hoặc `Register error: {...}`
+
+### 4. Kiểm tra kết nối Backend
+```bash
+# Test kết nối
+curl http://localhost:5032/api/health
+
+# Hoặc mở trình duyệt
+http://localhost:5032/api/health
+```
 
 ## 📈 Tính năng có thể mở rộng
 - Chuyển từ InMemory sang MySQL/PostgreSQL
